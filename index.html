@@ -138,4 +138,6 @@ if(ok(await db.from('gb_products').insert({title,price,category:$('#nc').value.t
 async function rv(id,yes){const r=yes?await db.from('gb_reviews').update({approved:true}).eq('id',id):await db.from('gb_reviews').delete().eq('id',id);if(ok(r)){await load();aload()}}
 async function saveC(){const rows=[...document.querySelectorAll('[data-k]')].map(e=>({key:e.dataset.k,value:e.value}));if(ok(await db.from('gb_site_content').upsert(rows))){await load();toast('Content saved')}}
 applyStatic();load();
+function hashNav(){if(location.hash=='#admin')go('admin')}
+addEventListener('hashchange',hashNav);hashNav();
 </script></body></html>
