@@ -53,7 +53,7 @@ footer{text-align:center;color:var(--mut);padding:30px;border-top:1px solid var(
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 /* ====== CONFIG: paste your Supabase project values (Settings > API). The anon key is public by design; RLS protects the data. ====== */
-const SB_URL='https://nqauqewbdiksoolsjwhc.supabase.co',SB_KEY='sb_publishable_KM0WHrrGSoIe0GQGARpQkA_M2iPluua';
+const SB_URL='https://YOUR-PROJECT.supabase.co',SB_KEY='YOUR-ANON-KEY';
 const db=supabase.createClient(SB_URL,SB_KEY);
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /* ====== i18n: [key, EN, FR, AR]. Product/site texts come from the database (see admin > Translations / content). ====== */
@@ -87,7 +87,7 @@ pic=p=>p?.image_url?`<img src="${esc(p.image_url)}" alt="${esc(tl(p,'title'))}" 
 function toast(m){const e=$('#toast');e.textContent=m;e.style.display='block';clearTimeout(e.h);e.h=setTimeout(()=>e.style.display='none',3800)}
 function go(v,sec){view=v;if(v=='admin')aload();render();if(sec){const e=document.getElementById(sec);e&&e.scrollIntoView({behavior:'smooth'})}else scrollTo(0,0)}
 function ov(h,c){$('#pn').innerHTML=h;$('#ov').className='ov on'+(c?' c':'')}function closeOv(){$('#ov').className='ov'}
-async function load(){const [p,r,c]=await Promise.all([db.from('products').select('*').eq('active',true).order('created_at'),db.from('reviews').select('*').eq('approved',true).order('created_at',{ascending:false}),db.from('site_content').select('*')]);
+async function load(){const [p,r,c]=await Promise.all([db.from('gb_products').select('*').eq('active',true).order('created_at'),db.from('gb_reviews').select('*').eq('approved',true).order('created_at',{ascending:false}),db.from('gb_site_content').select('*')]);
 P=p.data||[];R=r.data||[];C=Object.fromEntries((c.data||[]).map(x=>[x.key,x.value]));if(p.error)toast('Supabase config error');render()}
 function render(){$('#promo').textContent=cv('promo');$('#cn').textContent=Object.values(cart).reduce((a,b)=>a+b,0);$('#app').innerHTML=view=='shop'?shop():admin()}
 function card(p){const a=avg(p.id);return `<div class="card" onclick="detail('${p.id}')"><div class="ph">${pic(p)}</div><div class="i s"><div>${esc(tl(p,'title'))}</div><div class="st">${a?stars(a):'☆☆☆☆☆'}</div><b>${dt(p.price)}</b>${p.stock<1?` <span class="mut">· ${t('sold')}</span>`:''}</div></div>`}
@@ -101,7 +101,7 @@ ov(`<div class="ph" style="font-size:90px;background:var(--soft);aspect-ratio:1"
 <h3 style="font-weight:400;margin-top:26px">${t('reviews')}</h3>${rs.map(r=>`<div class="row"><span><span class="st">${stars(r.rating)}</span><br>${esc(r.comment)}<br><span class="mut">${esc(r.name)}</span></span></div>`).join('')||`<p class="mut">${t('norev')}</p>`}
 <h3 style="font-weight:400">${t('leave')}</h3><label>${t('name')}</label><input id="rn" maxlength="40"><label>${t('rating')}</label><select id="rs">${[5,4,3,2,1].map(n=>`<option>${n}</option>`).join('')}</select><label>${t('comment')}</label><textarea id="rt" maxlength="300"></textarea><p><button class="btn o sm" onclick="addRev('${id}')">${t('send')}</button></p>`,1)}
 async function addRev(id){const name=$('#rn').value.trim(),comment=$('#rt').value.trim();if(!name||!comment)return toast(t('fill'));
-const{error}=await db.from('reviews').insert({product_id:id,name,rating:+$('#rs').value,comment});if(error)return toast(error.message);closeOv();toast(t('thanks'))}
+const{error}=await db.from('gb_reviews').insert({product_id:id,name,rating:+$('#rs').value,comment});if(error)return toast(error.message);closeOv();toast(t('thanks'))}
 function add(id){const p=pf(id);if((cart[id]||0)>=p.stock)return toast(t('maxstock'));cart[id]=(cart[id]||0)+1;render();openCart()}
 function chg(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];render();openCart()}
 const sub=()=>Object.entries(cart).reduce((a,[i,n])=>a+pf(i).price*n,0);
@@ -109,14 +109,14 @@ function openCart(){const e=Object.entries(cart);ov(`<h2>${t('yourcart')}</h2>${
 function checkout(){ov(`<h2>${t('checkout')}</h2><p class="mut">${t('cod')}</p><label>${t('fn')}</label><input id="fn" maxlength="50"><label>${t('ln')}</label><input id="ln" maxlength="50"><label>${t('phone')}</label><input id="ph" inputmode="tel" maxlength="16" dir="ltr"><label>${t('fulfil')}</label><select id="md" onchange="$('#ad').parentNode.style.display=this.value=='delivery'?'block':'none'"><option value="delivery">${t('deliv')}</option><option value="pickup">${t('pick')}</option></select><div><label>${t('addr')}</label><textarea id="ad" maxlength="200"></textarea></div><p><button class="btn a" id="po" onclick="place()">${t('place')} — ${dt(sub())}</button></p><p class="mut">${t('discnote')}</p>`,1)}
 async function place(){const fn=$('#fn').value.trim(),ln=$('#ln').value.trim(),ph=$('#ph').value.trim(),md=$('#md').value,ad=$('#ad').value.trim();
 if(!fn||!ln||!/^[0-9+ ]{8,16}$/.test(ph)||(md=='delivery'&&ad.length<5))return toast(t('invalid'));
-$('#po').disabled=true;const{data,error}=await db.rpc('place_order',{p_first:fn,p_last:ln,p_phone:ph,p_mode:md,p_addr:ad,p_items:Object.entries(cart).map(([id,n])=>({id,n}))});
+$('#po').disabled=true;const{data,error}=await db.rpc('gb_place_order',{p_first:fn,p_last:ln,p_phone:ph,p_mode:md,p_addr:ad,p_items:Object.entries(cart).map(([id,n])=>({id,n}))});
 if(error){$('#po').disabled=false;return toast(error.message)}
 cart={};closeOv();await load();toast(t(md=='delivery'?'t48':'tpick')+(data.discount?' · '+t('loy10'):''))}
 function acct(){ov(`<h2>${t('loyh')}</h2><label>${t('phone')}</label><input id="lp" inputmode="tel" dir="ltr"><p><button class="btn sm" onclick="showL()">${t('view')}</button></p><div id="lc"></div>`,1)}
-async function showL(){const{data}=await db.rpc('get_loyalty',{p_phone:$('#lp').value}),n=data||0,d=Math.min(n,10);$('#lc').innerHTML=`<p><b>${d} / 10 ${t('done')}</b></p><div class="prog"><i style="width:${d*10}%"></i></div><p>${n>=10?t('next10'):t('more').replace('{n}',10-d)}</p>`}
+async function showL(){const{data}=await db.rpc('gb_get_loyalty',{p_phone:$('#lp').value}),n=data||0,d=Math.min(n,10);$('#lc').innerHTML=`<p><b>${d} / 10 ${t('done')}</b></p><div class="prog"><i style="width:${d*10}%"></i></div><p>${n>=10?t('next10'):t('more').replace('{n}',10-d)}</p>`}
 /* ====== ADMIN (English UI; Supabase Auth + RLS enforce access) ====== */
-async function aload(){const{data:{session}}=await db.auth.getSession();isAdmin=false;if(session){const{data}=await db.from('admins').select('user_id').maybeSingle();isAdmin=!!data}
-if(isAdmin){const[o,p,r]=await Promise.all([db.from('orders').select('*').order('created_at',{ascending:false}),db.from('products').select('*').order('created_at'),db.from('reviews').select('*').order('created_at',{ascending:false})]);AD={o:o.data||[],p:p.data||[],r:r.data||[]}}render()}
+async function aload(){const{data:{session}}=await db.auth.getSession();isAdmin=false;if(session){const{data}=await db.from('gb_admins').select('user_id').maybeSingle();isAdmin=!!data}
+if(isAdmin){const[o,p,r]=await Promise.all([db.from('gb_orders').select('*').order('created_at',{ascending:false}),db.from('gb_products').select('*').order('created_at'),db.from('gb_reviews').select('*').order('created_at',{ascending:false})]);AD={o:o.data||[],p:p.data||[],r:r.data||[]}}render()}
 async function login(){const{error}=await db.auth.signInWithPassword({email:$('#em').value,password:$('#pw').value});if(error)return toast('Login failed');aload()}
 async function logout(){await db.auth.signOut();isAdmin=false;go('shop')}
 function admin(){if(!isAdmin)return `<section class="s" style="max-width:420px"><h2>Admin login</h2><label>Email</label><input class="w" id="em" type="email" dir="ltr"><label>Password</label><input class="w" id="pw" type="password" dir="ltr"><p><button class="btn" onclick="login()">Sign in</button></p></section>`;
@@ -128,14 +128,14 @@ if(tab=='reviews')b=AD.r.map(r=>`<div class="row"><span><span class="st">${stars
 if(tab=='content')b='<p class="mut">English is the default; FR / AR fall back to English when left empty.</p>'+[['promo','Promo banner'],['hero_title','Hero title'],['hero_sub','Hero subtitle'],['story','Our Story']].map(([k,l])=>`<label>${l}</label>`+['','_fr','_ar'].map(s=>k=='story'?`<textarea class="w" rows="4" data-k="${k+s}" placeholder="${s||'EN'}" ${s=='_ar'?'dir="rtl"':''}>${esc(C[k+s])}</textarea>`:`<input class="w" data-k="${k+s}" placeholder="${s||'EN'}" value="${esc(C[k+s])}" ${s=='_ar'?'dir="rtl"':''}>`).join('')).join('')+`<p><button class="btn" onclick="saveC()">Save changes</button></p>`;
 return `<section class="s"><h2>Admin dashboard <button class="btn o sm" onclick="logout()">Sign out</button></h2><div class="tabs">${T.map(x=>`<button class="btn ${x==tab?'on':''}" onclick="tab='${x}';render()">${x}</button>`).join('')}</div>${b}</section>`}
 const ok=r=>{if(r.error){toast(r.error.message);return false}return true};
-async function setSt(id,status){if(ok(await db.from('orders').update({status}).eq('id',id)))toast('Status updated')}
-async function upP(id,v){if(ok(await db.from('products').update(v).eq('id',id)))toast('Saved')}
-async function delP(id){if(confirm('Delete this product?')&&ok(await db.from('products').delete().eq('id',id))){await load();aload()}}
+async function setSt(id,status){if(ok(await db.from('gb_orders').update({status}).eq('id',id)))toast('Status updated')}
+async function upP(id,v){if(ok(await db.from('gb_products').update(v).eq('id',id)))toast('Saved')}
+async function delP(id){if(confirm('Delete this product?')&&ok(await db.from('gb_products').delete().eq('id',id))){await load();aload()}}
 function trP(id){const p=pf(id);ov(`<h2>${esc(p.title)}</h2>${[['title_fr','Title (FR)'],['description_fr','Description (FR)'],['title_ar','Title (AR)'],['description_ar','Description (AR)']].map(([k,l])=>`<label>${l}</label><input data-t="${k}" value="${esc(p[k])}" ${k.endsWith('ar')?'dir="rtl"':''}>`).join('')}<p><button class="btn" onclick="saveTr('${id}')">Save</button></p>`,1)}
-async function saveTr(id){const v={};document.querySelectorAll('[data-t]').forEach(e=>v[e.dataset.t]=e.value.trim()||null);if(ok(await db.from('products').update(v).eq('id',id))){closeOv();await load();aload()}}
+async function saveTr(id){const v={};document.querySelectorAll('[data-t]').forEach(e=>v[e.dataset.t]=e.value.trim()||null);if(ok(await db.from('gb_products').update(v).eq('id',id))){closeOv();await load();aload()}}
 async function addP(){const title=$('#nt').value.trim(),price=+$('#np').value;if(!title||!(price>=0))return toast('Title and price required');
-if(ok(await db.from('products').insert({title,price,category:$('#nc').value.trim()||'Other',stock:+$('#ns').value||0,description:$('#nd').value.trim()}))){await load();aload()}}
-async function rv(id,yes){const r=yes?await db.from('reviews').update({approved:true}).eq('id',id):await db.from('reviews').delete().eq('id',id);if(ok(r)){await load();aload()}}
-async function saveC(){const rows=[...document.querySelectorAll('[data-k]')].map(e=>({key:e.dataset.k,value:e.value}));if(ok(await db.from('site_content').upsert(rows))){await load();toast('Content saved')}}
+if(ok(await db.from('gb_products').insert({title,price,category:$('#nc').value.trim()||'Other',stock:+$('#ns').value||0,description:$('#nd').value.trim()}))){await load();aload()}}
+async function rv(id,yes){const r=yes?await db.from('gb_reviews').update({approved:true}).eq('id',id):await db.from('gb_reviews').delete().eq('id',id);if(ok(r)){await load();aload()}}
+async function saveC(){const rows=[...document.querySelectorAll('[data-k]')].map(e=>({key:e.dataset.k,value:e.value}));if(ok(await db.from('gb_site_content').upsert(rows))){await load();toast('Content saved')}}
 applyStatic();load();
 </script></body></html>
