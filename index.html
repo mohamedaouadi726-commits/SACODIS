@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+<title>Gift Boutique</title>
+<style>
+:root{--bg:#fafaf8;--fg:#1a1a1a;--mut:#6b6b66;--line:#e6e4df;--card:#fff;--soft:#f1efea;--acc:#a8814f;--on:#fff}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#121211;--fg:#f2f0ea;--mut:#a09d94;--line:#2c2b28;--card:#1b1a18;--soft:#22211e;--acc:#c9a272;--on:#121211}}
+:root[data-theme=dark]{color-scheme:dark;--bg:#121211;--fg:#f2f0ea;--mut:#a09d94;--line:#2c2b28;--card:#1b1a18;--soft:#22211e;--acc:#c9a272;--on:#121211}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--fg);font:15px/1.6 Georgia,serif}
+html[lang=ar] body,html[lang=ar] button,html[lang=ar] input{font-family:'Segoe UI',Tahoma,system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}.s{font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:12px 5vw;flex-wrap:wrap}
+.logo{font-size:20px;letter-spacing:.18em;text-transform:uppercase;margin-inline-end:auto;cursor:pointer}
+header nav{display:flex;gap:16px}.lk,header a{cursor:pointer;color:var(--mut);font-size:13px;letter-spacing:.06em;text-transform:uppercase;background:none;border:0;padding:0}
+.lk:hover,header a:hover{color:var(--fg)}#q,#lg{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:6px 14px}#q{width:150px}#lg{padding:5px 8px}
+.promo{background:var(--fg);color:var(--bg);text-align:center;padding:7px;font-size:12px;letter-spacing:.08em}
+.hero{padding:12vh 5vw;text-align:center;background:linear-gradient(135deg,var(--soft),var(--bg))}
+.hero h1{font-size:clamp(34px,7vw,68px);font-weight:400;margin:0 0 12px;line-height:1.1}.hero p{color:var(--mut);max-width:560px;margin:0 auto 26px;font-size:17px}
+.btn{background:var(--fg);color:var(--bg);border:0;padding:12px 28px;border-radius:2px;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;font-size:12px}
+.btn.o{background:none;color:var(--fg);border:1px solid var(--fg)}.btn.a{background:var(--acc);color:var(--on)}.btn.sm{padding:6px 12px}.btn:disabled{opacity:.4}
+section{padding:60px 5vw;max-width:1200px;margin:auto}h2{font-weight:400;font-size:28px;margin:0 0 24px;letter-spacing:.04em}
+.story{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}.story .ph{aspect-ratio:4/3;background:var(--soft);display:grid;place-items:center;font-size:80px;border:1px solid var(--line)}
+@media(max-width:700px){.story{grid-template-columns:1fr}}
+.bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:22px}.bar select,.bar input{border:1px solid var(--line);background:var(--card);padding:6px 10px;border-radius:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:22px}
+.card{background:var(--card);border:1px solid var(--line);cursor:pointer}.ph{display:grid;place-items:center;overflow:hidden}.ph img{width:100%;height:100%;object-fit:cover}
+.card .ph{aspect-ratio:1;background:var(--soft);font-size:64px}.card .i{padding:12px 14px}.st{color:var(--acc);letter-spacing:2px}.mut{color:var(--mut);font-size:13px}
+.rv{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}.rv>div{border:1px solid var(--line);background:var(--card);padding:16px}
+.ov{position:fixed;inset:0;background:#0007;z-index:20;display:none;justify-content:flex-end}.ov.c{justify-content:center;align-items:center}.ov.on{display:flex}
+.pn{background:var(--bg);width:min(420px,100%);height:100%;overflow:auto;padding:24px}.ov.c .pn{height:auto;max-height:92%;width:min(560px,94%);border:1px solid var(--line)}
+.pn label,section label{display:block;margin:10px 0 3px;font-size:13px;color:var(--mut)}
+.pn input,.pn textarea,.pn select,section .w{width:100%;border:1px solid var(--line);background:var(--card);padding:8px 10px;border-radius:2px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.prog{height:8px;background:var(--soft);border-radius:9px;overflow:hidden;margin:10px 0}.prog i{display:block;height:100%;background:var(--acc)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:12px 22px;z-index:30;display:none;max-width:90%;text-align:center}
+.tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}.tabs .btn{opacity:.55}.tabs .btn.on{opacity:1}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:560px}td,th{padding:8px;text-align:start;border-bottom:1px solid var(--line);font-size:14px}
+footer{text-align:center;color:var(--mut);padding:30px;border-top:1px solid var(--line);font-size:13px}
+</style></head>
+<body>
+<div class="promo s" id="promo"></div>
+<header class="s"><span class="logo" onclick="go('shop')">Gift Boutique</span>
+<nav><a data-i="shop" onclick="go('shop','shop')"></a><a data-i="story" onclick="go('shop','story')"></a><a data-i="reviews" onclick="go('shop','reviews')"></a></nav>
+<input id="q" data-p="search" oninput="q=this.value;go('shop','shop')">
+<button class="lk" data-i="account" onclick="acct()"></button><button class="lk" onclick="openCart()"><span data-i="cart"></span> (<span id="cn">0</span>)</button>
+<button class="lk" id="th" onclick="toggleTheme()" aria-label="Theme">◐</button>
+<select id="lg" onchange="setLang(this.value)" aria-label="Language"><option value="fr">FR</option><option value="en">EN</option><option value="ar">عربي</option></select></header>
+<main id="app"></main>
+<footer class="s"><span data-i="foot"></span> · <a class="lk" onclick="go('admin')">Admin</a></footer>
+<div class="ov" id="ov" onclick="if(event.target==this)closeOv()"><div class="pn s" id="pn"></div></div>
+<div id="toast" class="s"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+/* ====== CONFIG: paste your Supabase project values (Settings > API). The anon key is public by design; RLS protects the data. ====== */
+const SB_URL='https://YOUR-PROJECT.supabase.co',SB_KEY='YOUR-ANON-KEY';
+const db=supabase.createClient(SB_URL,SB_KEY);
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* ====== i18n: [key, EN, FR, AR]. Product/site texts come from the database (see admin > Translations / content). ====== */
+const D={en:{},fr:{},ar:{}};
+[['shop','Shop','Boutique','المتجر'],['story','Our Story','Notre histoire','قصتنا'],['reviews','Reviews','Avis','آراء'],['search','Search…','Rechercher…','بحث…'],['account','Account','Compte','حسابي'],['cart','Cart','Panier','السلة'],
+['foot','Cash on Delivery','Paiement à la livraison','الدفع عند الاستلام'],['cta','Shop the collection','Voir la collection','تسوّق المجموعة'],['coll','The Collection','La collection','المجموعة'],['revh','Customer Reviews','Avis clients','آراء الحرفاء'],
+['all','All','Tout','الكل'],['upto','Up to','Jusqu’à','حتى'],['nomatch','No products match.','Aucun produit trouvé.','لا توجد منتجات.'],['sold','sold out','épuisé','نفد'],['instock','in stock','en stock','متوفر'],
+['add','Add to cart','Ajouter au panier','أضف إلى السلة'],['norev','No reviews yet.','Pas encore d’avis.','لا توجد آراء بعد.'],['leave','Leave a review','Laisser un avis','أضف رأيك'],['name','Name','Nom','الاسم'],
+['rating','Rating','Note','التقييم'],['comment','Comment','Commentaire','التعليق'],['send','Submit (awaits moderation)','Envoyer (après modération)','إرسال (بعد المراجعة)'],['fill','Please fill name and comment','Remplissez le nom et le commentaire','املأ الاسم والتعليق'],
+['thanks','Thanks! Your review will appear once approved.','Merci ! Votre avis apparaîtra après validation.','شكرًا! سيظهر رأيك بعد الموافقة.'],['maxstock','Max stock reached','Stock maximum atteint','بلغت الحد الأقصى للمخزون'],
+['yourcart','Your cart','Votre panier','سلتك'],['empty','Your cart is empty.','Votre panier est vide.','السلة فارغة.'],['subtotal','Subtotal','Sous-total','المجموع الجزئي'],['checkout','Checkout','Commander','إتمام الطلب'],
+['cod','Payment: Cash on Delivery','Paiement : à la livraison','الدفع عند الاستلام'],['fn','First name','Prénom','الاسم'],['ln','Last name','Nom','اللقب'],['phone','Phone number','Téléphone','رقم الهاتف'],
+['fulfil','Fulfillment','Mode de réception','طريقة الاستلام'],['deliv','Home delivery','Livraison à domicile','توصيل إلى المنزل'],['pick','In-store pick-up','Retrait en magasin','استلام من المحل'],
+['addr','Shipping address','Adresse de livraison','عنوان التوصيل'],['place','Place order','Valider la commande','تأكيد الطلب'],['discnote','Discounts are applied automatically at confirmation.','Les remises sont appliquées automatiquement.','يتم تطبيق التخفيضات تلقائيًا.'],
+['invalid','Please complete all fields with valid values','Veuillez remplir correctement tous les champs','يرجى ملء جميع الحقول بشكل صحيح'],['t48','Your order will arrive within 48 hours','Votre commande arrivera sous 48 heures','ستصلك طلبيتك خلال 48 ساعة'],
+['tpick','Order received — see you in store!','Commande reçue — à bientôt en magasin !','تم استلام الطلب — نراك في المحل!'],['loy10','Loyalty −10% applied 🎉','Fidélité −10 % appliquée 🎉','تم تطبيق خصم الولاء 10% 🎉'],
+['loyh','Loyalty card','Carte de fidélité','بطاقة الولاء'],['view','View my card','Voir ma carte','عرض بطاقتي'],['done','orders completed','commandes validées','طلبات مكتملة'],
+['next10','🎉 Your next order gets 10% off!','🎉 Votre prochaine commande a −10 % !','🎉 طلبك القادم بتخفيض 10%!'],['more','{n} more delivered order(s) until your exclusive discount.','Encore {n} commande(s) livrée(s) avant votre remise exclusive.','بقي {n} طلب(ات) مسلّمة للحصول على تخفيضك الخاص.'],
+['dt','DT','DT','د.ت']].forEach(([k,e,f,a])=>{D.en[k]=e;D.fr[k]=f;D.ar[k]=a});
+let lang='fr';try{lang=localStorage.getItem('gb_lang')||(navigator.language||'fr').slice(0,2)}catch(e){}if(!D[lang])lang='fr';
+const t=k=>D[lang][k]||D.en[k],tl=(o,f)=>(o&&(o[f+'_'+lang]||o[f]))||'',cv=k=>C[k+'_'+lang]||C[k]||'';
+function applyStatic(){const h=document.documentElement;h.lang=lang;h.dir=lang=='ar'?'rtl':'ltr';$('#lg').value=lang;
+document.querySelectorAll('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));document.querySelectorAll('[data-p]').forEach(e=>e.placeholder=t(e.dataset.p))}
+function setLang(l){lang=l;try{localStorage.setItem('gb_lang',l)}catch(e){}applyStatic();render()}
+function toggleTheme(){const r=document.documentElement,dark=r.dataset.theme?r.dataset.theme=='dark':matchMedia('(prefers-color-scheme:dark)').matches,n=dark?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('gb_theme',n)}catch(e){}}
+try{const th=localStorage.getItem('gb_theme');if(th)document.documentElement.dataset.theme=th}catch(e){}
+let P=[],R=[],C={},cart={},cat='all',mx=200,q='',view='shop',tab='orders',isAdmin=false,AD={};
+const stars=n=>'★'.repeat(Math.round(n))+'☆'.repeat(5-Math.round(n)),dt=n=>Number(n).toFixed(2)+' '+t('dt'),pf=id=>P.find(x=>x.id==id)||AD.p?.find(x=>x.id==id),
+avg=id=>{const r=R.filter(x=>x.product_id==id);return r.length?r.reduce((a,b)=>a+b.rating,0)/r.length:0},
+pic=p=>p?.image_url?`<img src="${esc(p.image_url)}" alt="${esc(tl(p,'title'))}" loading="lazy">`:esc(p?.emoji||'🎁');
+function toast(m){const e=$('#toast');e.textContent=m;e.style.display='block';clearTimeout(e.h);e.h=setTimeout(()=>e.style.display='none',3800)}
+function go(v,sec){view=v;if(v=='admin')aload();render();if(sec){const e=document.getElementById(sec);e&&e.scrollIntoView({behavior:'smooth'})}else scrollTo(0,0)}
+function ov(h,c){$('#pn').innerHTML=h;$('#ov').className='ov on'+(c?' c':'')}function closeOv(){$('#ov').className='ov'}
+async function load(){const [p,r,c]=await Promise.all([db.from('products').select('*').eq('active',true).order('created_at'),db.from('reviews').select('*').eq('approved',true).order('created_at',{ascending:false}),db.from('site_content').select('*')]);
+P=p.data||[];R=r.data||[];C=Object.fromEntries((c.data||[]).map(x=>[x.key,x.value]));if(p.error)toast('Supabase config error');render()}
+function render(){$('#promo').textContent=cv('promo');$('#cn').textContent=Object.values(cart).reduce((a,b)=>a+b,0);$('#app').innerHTML=view=='shop'?shop():admin()}
+function card(p){const a=avg(p.id);return `<div class="card" onclick="detail('${p.id}')"><div class="ph">${pic(p)}</div><div class="i s"><div>${esc(tl(p,'title'))}</div><div class="st">${a?stars(a):'☆☆☆☆☆'}</div><b>${dt(p.price)}</b>${p.stock<1?` <span class="mut">· ${t('sold')}</span>`:''}</div></div>`}
+function shop(){const cats=['all',...new Set(P.map(p=>p.category))],list=P.filter(p=>(cat=='all'||p.category==cat)&&p.price<=mx&&tl(p,'title').toLowerCase().includes(q.toLowerCase()));
+return `<div class="hero"><h1>${esc(cv('hero_title'))}</h1><p class="s">${esc(cv('hero_sub'))}</p><button class="btn" onclick="go('shop','shop')">${t('cta')}</button></div>
+<section id="story"><div class="story"><div class="ph">🎁</div><div><h2>${t('story')}</h2><p>${esc(cv('story'))}</p></div></div></section>
+<section id="shop"><h2>${t('coll')}</h2><div class="bar s"><select onchange="cat=this.value;render()">${cats.map(c=>`<option value="${esc(c)}" ${c==cat?'selected':''}>${c=='all'?t('all'):esc(c)}</option>`).join('')}</select><label style="margin:0">${t('upto')} <b>${mx} ${t('dt')}</b> <input type="range" min="10" max="200" step="5" value="${mx}" oninput="mx=+this.value;render()"></label></div><div class="grid">${list.map(card).join('')||`<p class="mut">${t('nomatch')}</p>`}</div></section>
+<section id="reviews"><h2>${t('revh')}</h2><div class="rv">${R.slice(0,9).map(r=>`<div><div class="st">${stars(r.rating)}</div><p>“${esc(r.comment)}”</p><div class="mut s">${esc(r.name)} · ${esc(tl(pf(r.product_id),'title'))}</div></div>`).join('')||`<p class="mut">${t('norev')}</p>`}</div></section>`}
+function detail(id){const p=pf(id),rs=R.filter(r=>r.product_id==id);
+ov(`<div class="ph" style="font-size:90px;background:var(--soft);aspect-ratio:1">${pic(p)}</div><h2 style="margin:14px 0 4px">${esc(tl(p,'title'))}</h2><div class="st">${avg(id)?stars(avg(id)):''}</div><p>${esc(tl(p,'description'))}</p><p><b>${dt(p.price)}</b> <span class="mut">· ${p.stock} ${t('instock')}</span></p><button class="btn" ${p.stock<1?'disabled':''} onclick="add('${id}')">${t('add')}</button>
+<h3 style="font-weight:400;margin-top:26px">${t('reviews')}</h3>${rs.map(r=>`<div class="row"><span><span class="st">${stars(r.rating)}</span><br>${esc(r.comment)}<br><span class="mut">${esc(r.name)}</span></span></div>`).join('')||`<p class="mut">${t('norev')}</p>`}
+<h3 style="font-weight:400">${t('leave')}</h3><label>${t('name')}</label><input id="rn" maxlength="40"><label>${t('rating')}</label><select id="rs">${[5,4,3,2,1].map(n=>`<option>${n}</option>`).join('')}</select><label>${t('comment')}</label><textarea id="rt" maxlength="300"></textarea><p><button class="btn o sm" onclick="addRev('${id}')">${t('send')}</button></p>`,1)}
+async function addRev(id){const name=$('#rn').value.trim(),comment=$('#rt').value.trim();if(!name||!comment)return toast(t('fill'));
+const{error}=await db.from('reviews').insert({product_id:id,name,rating:+$('#rs').value,comment});if(error)return toast(error.message);closeOv();toast(t('thanks'))}
+function add(id){const p=pf(id);if((cart[id]||0)>=p.stock)return toast(t('maxstock'));cart[id]=(cart[id]||0)+1;render();openCart()}
+function chg(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];render();openCart()}
+const sub=()=>Object.entries(cart).reduce((a,[i,n])=>a+pf(i).price*n,0);
+function openCart(){const e=Object.entries(cart);ov(`<h2>${t('yourcart')}</h2>${e.map(([i,n])=>`<div class="row"><span>${esc(pf(i).emoji)} ${esc(tl(pf(i),'title'))}<br><span class="mut">${dt(pf(i).price)}</span></span><span><button class="btn o sm" onclick="chg('${i}',-1)">−</button> ${n} <button class="btn o sm" onclick="chg('${i}',1)">+</button></span></div>`).join('')||`<p class="mut">${t('empty')}</p>`}${e.length?`<p><b>${t('subtotal')}: ${dt(sub())}</b></p><button class="btn" onclick="checkout()">${t('checkout')}</button>`:''}`)}
+function checkout(){ov(`<h2>${t('checkout')}</h2><p class="mut">${t('cod')}</p><label>${t('fn')}</label><input id="fn" maxlength="50"><label>${t('ln')}</label><input id="ln" maxlength="50"><label>${t('phone')}</label><input id="ph" inputmode="tel" maxlength="16" dir="ltr"><label>${t('fulfil')}</label><select id="md" onchange="$('#ad').parentNode.style.display=this.value=='delivery'?'block':'none'"><option value="delivery">${t('deliv')}</option><option value="pickup">${t('pick')}</option></select><div><label>${t('addr')}</label><textarea id="ad" maxlength="200"></textarea></div><p><button class="btn a" id="po" onclick="place()">${t('place')} — ${dt(sub())}</button></p><p class="mut">${t('discnote')}</p>`,1)}
+async function place(){const fn=$('#fn').value.trim(),ln=$('#ln').value.trim(),ph=$('#ph').value.trim(),md=$('#md').value,ad=$('#ad').value.trim();
+if(!fn||!ln||!/^[0-9+ ]{8,16}$/.test(ph)||(md=='delivery'&&ad.length<5))return toast(t('invalid'));
+$('#po').disabled=true;const{data,error}=await db.rpc('place_order',{p_first:fn,p_last:ln,p_phone:ph,p_mode:md,p_addr:ad,p_items:Object.entries(cart).map(([id,n])=>({id,n}))});
+if(error){$('#po').disabled=false;return toast(error.message)}
+cart={};closeOv();await load();toast(t(md=='delivery'?'t48':'tpick')+(data.discount?' · '+t('loy10'):''))}
+function acct(){ov(`<h2>${t('loyh')}</h2><label>${t('phone')}</label><input id="lp" inputmode="tel" dir="ltr"><p><button class="btn sm" onclick="showL()">${t('view')}</button></p><div id="lc"></div>`,1)}
+async function showL(){const{data}=await db.rpc('get_loyalty',{p_phone:$('#lp').value}),n=data||0,d=Math.min(n,10);$('#lc').innerHTML=`<p><b>${d} / 10 ${t('done')}</b></p><div class="prog"><i style="width:${d*10}%"></i></div><p>${n>=10?t('next10'):t('more').replace('{n}',10-d)}</p>`}
+/* ====== ADMIN (English UI; Supabase Auth + RLS enforce access) ====== */
+async function aload(){const{data:{session}}=await db.auth.getSession();isAdmin=false;if(session){const{data}=await db.from('admins').select('user_id').maybeSingle();isAdmin=!!data}
+if(isAdmin){const[o,p,r]=await Promise.all([db.from('orders').select('*').order('created_at',{ascending:false}),db.from('products').select('*').order('created_at'),db.from('reviews').select('*').order('created_at',{ascending:false})]);AD={o:o.data||[],p:p.data||[],r:r.data||[]}}render()}
+async function login(){const{error}=await db.auth.signInWithPassword({email:$('#em').value,password:$('#pw').value});if(error)return toast('Login failed');aload()}
+async function logout(){await db.auth.signOut();isAdmin=false;go('shop')}
+function admin(){if(!isAdmin)return `<section class="s" style="max-width:420px"><h2>Admin login</h2><label>Email</label><input class="w" id="em" type="email" dir="ltr"><label>Password</label><input class="w" id="pw" type="password" dir="ltr"><p><button class="btn" onclick="login()">Sign in</button></p></section>`;
+const T=['orders','products','reviews','content'];let b='';
+if(tab=='orders')b=`<div class="tw"><table><tr><th>Customer</th><th>Phone</th><th>Mode</th><th>Total</th><th>Status</th></tr>${AD.o.map(o=>`<tr><td>${esc(o.first_name)} ${esc(o.last_name)}<br><span class="mut">${new Date(o.created_at).toLocaleString()}${o.address?'<br>'+esc(o.address):''}</span></td><td dir="ltr">${esc(o.phone)}</td><td>${o.mode}<br><span class="mut">COD${o.discount?' · loyalty −10%':''}</span></td><td>${Number(o.total).toFixed(2)} DT</td><td><select onchange="setSt('${o.id}',this.value)">${['pending','shipped','delivered','canceled'].map(s=>`<option ${s==o.status?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join('')||'<tr><td colspan=5 class="mut">No orders yet.</td></tr>'}</table></div>`;
+if(tab=='products')b=`<div class="tw"><table><tr><th>Product</th><th>Price</th><th>Stock</th><th>Image URL</th><th></th></tr>${AD.p.map(p=>`<tr><td>${esc(p.emoji)} ${esc(p.title)}</td><td><input type="number" value="${p.price}" style="width:80px" onchange="upP('${p.id}',{price:+this.value})"></td><td><input type="number" value="${p.stock}" style="width:70px" onchange="upP('${p.id}',{stock:+this.value})"></td><td><input value="${esc(p.image_url||'')}" placeholder="https://…" onchange="upP('${p.id}',{image_url:this.value.trim()||null})"></td><td><button class="btn o sm" onclick="trP('${p.id}')">FR / AR</button> <button class="btn o sm" onclick="delP('${p.id}')">Delete</button></td></tr>`).join('')}</table></div>
+<h3 style="font-weight:400">Add product (English text, add FR/AR after)</h3><div class="bar"><input id="nt" placeholder="Title"><input id="np" type="number" placeholder="Price" style="width:90px"><input id="nc" placeholder="Category" style="width:120px"><input id="ns" type="number" placeholder="Stock" style="width:80px"><input id="nd" placeholder="Description"><button class="btn sm" onclick="addP()">Add</button></div>`;
+if(tab=='reviews')b=AD.r.map(r=>`<div class="row"><span><span class="st">${stars(r.rating)}</span> ${esc(r.name)} on ${esc(pf(r.product_id)?.title||'?')}<br>${esc(r.comment)}</span><span>${r.approved?'<span class="mut">approved</span>':`<button class="btn sm" onclick="rv('${r.id}',1)">Approve</button>`} <button class="btn o sm" onclick="rv('${r.id}',0)">Delete</button></span></div>`).join('')||'<p class="mut">No reviews.</p>';
+if(tab=='content')b='<p class="mut">English is the default; FR / AR fall back to English when left empty.</p>'+[['promo','Promo banner'],['hero_title','Hero title'],['hero_sub','Hero subtitle'],['story','Our Story']].map(([k,l])=>`<label>${l}</label>`+['','_fr','_ar'].map(s=>k=='story'?`<textarea class="w" rows="4" data-k="${k+s}" placeholder="${s||'EN'}" ${s=='_ar'?'dir="rtl"':''}>${esc(C[k+s])}</textarea>`:`<input class="w" data-k="${k+s}" placeholder="${s||'EN'}" value="${esc(C[k+s])}" ${s=='_ar'?'dir="rtl"':''}>`).join('')).join('')+`<p><button class="btn" onclick="saveC()">Save changes</button></p>`;
+return `<section class="s"><h2>Admin dashboard <button class="btn o sm" onclick="logout()">Sign out</button></h2><div class="tabs">${T.map(x=>`<button class="btn ${x==tab?'on':''}" onclick="tab='${x}';render()">${x}</button>`).join('')}</div>${b}</section>`}
+const ok=r=>{if(r.error){toast(r.error.message);return false}return true};
+async function setSt(id,status){if(ok(await db.from('orders').update({status}).eq('id',id)))toast('Status updated')}
+async function upP(id,v){if(ok(await db.from('products').update(v).eq('id',id)))toast('Saved')}
+async function delP(id){if(confirm('Delete this product?')&&ok(await db.from('products').delete().eq('id',id))){await load();aload()}}
+function trP(id){const p=pf(id);ov(`<h2>${esc(p.title)}</h2>${[['title_fr','Title (FR)'],['description_fr','Description (FR)'],['title_ar','Title (AR)'],['description_ar','Description (AR)']].map(([k,l])=>`<label>${l}</label><input data-t="${k}" value="${esc(p[k])}" ${k.endsWith('ar')?'dir="rtl"':''}>`).join('')}<p><button class="btn" onclick="saveTr('${id}')">Save</button></p>`,1)}
+async function saveTr(id){const v={};document.querySelectorAll('[data-t]').forEach(e=>v[e.dataset.t]=e.value.trim()||null);if(ok(await db.from('products').update(v).eq('id',id))){closeOv();await load();aload()}}
+async function addP(){const title=$('#nt').value.trim(),price=+$('#np').value;if(!title||!(price>=0))return toast('Title and price required');
+if(ok(await db.from('products').insert({title,price,category:$('#nc').value.trim()||'Other',stock:+$('#ns').value||0,description:$('#nd').value.trim()}))){await load();aload()}}
+async function rv(id,yes){const r=yes?await db.from('reviews').update({approved:true}).eq('id',id):await db.from('reviews').delete().eq('id',id);if(ok(r)){await load();aload()}}
+async function saveC(){const rows=[...document.querySelectorAll('[data-k]')].map(e=>({key:e.dataset.k,value:e.value}));if(ok(await db.from('site_content').upsert(rows))){await load();toast('Content saved')}}
+applyStatic();load();
+</script></body></html>
