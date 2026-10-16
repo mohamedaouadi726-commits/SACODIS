@@ -26,7 +26,7 @@ section{padding:60px 5vw;max-width:1200px;margin:auto}h2{font-weight:400;font-si
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:22px}
 .card{background:var(--card);border:1px solid var(--line);cursor:pointer}.ph{display:grid;place-items:center;overflow:hidden}.ph img{width:100%;height:100%;object-fit:cover}
 .card .ph{aspect-ratio:1;background:var(--soft);font-size:64px}.card .i{padding:12px 14px}.st{color:var(--acc);letter-spacing:2px}.mut{color:var(--mut);font-size:13px}
-.rv{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}.rv>div{border:1px solid var(--line);background:var(--card);padding:16px}
+.rv{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}.rv>div{border:1px solid var(--line);background:var(--card);padding:26px}.eb{display:inline-flex;align-items:center;gap:10px;color:var(--acc);font-size:12px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:10px}.eb i{width:26px;height:1px;background:var(--acc)}.au{display:flex;align-items:center;gap:12px;margin-top:20px;font-size:14px}.av{width:38px;height:38px;border-radius:50%;background:var(--fg);color:var(--acc);display:grid;place-items:center;font-family:Georgia,serif;font-weight:700}
 .ov{position:fixed;inset:0;background:#0007;z-index:20;display:none;justify-content:flex-end}.ov.c{justify-content:center;align-items:center}.ov.on{display:flex}
 .pn{background:var(--bg);width:min(420px,100%);height:100%;overflow:auto;padding:24px}.ov.c .pn{height:auto;max-height:92%;width:min(560px,94%);border:1px solid var(--line)}
 .pn label,section label{display:block;margin:10px 0 3px;font-size:13px;color:var(--mut)}
@@ -47,13 +47,13 @@ footer{text-align:center;color:var(--mut);padding:30px;border-top:1px solid var(
 <button class="lk" id="th" onclick="toggleTheme()" aria-label="Theme">◐</button>
 <select id="lg" onchange="setLang(this.value)" aria-label="Language"><option value="fr">FR</option><option value="en">EN</option><option value="ar">عربي</option></select></header>
 <main id="app"></main>
-<footer class="s"><span data-i="foot"></span> · <a class="lk" onclick="go('admin')">Admin</a></footer>
+<footer class="s"><span data-i="foot"></span></footer>
 <div class="ov" id="ov" onclick="if(event.target==this)closeOv()"><div class="pn s" id="pn"></div></div>
 <div id="toast" class="s"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 /* ====== CONFIG: paste your Supabase project values (Settings > API). The anon key is public by design; RLS protects the data. ====== */
-const SB_URL='https://nqauqewbdiksoolsjwhc.supabase.co',SB_KEY='sb_publishable_KM0WHrrGSoIe0GQGARpQkA_M2iPluua';
+const SB_URL='https://YOUR-PROJECT.supabase.co',SB_KEY='YOUR-ANON-KEY';
 const db=supabase.createClient(SB_URL,SB_KEY);
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /* ====== i18n: [key, EN, FR, AR]. Product/site texts come from the database (see admin > Translations / content). ====== */
@@ -77,6 +77,7 @@ const D={en:{},fr:{},ar:{}};
 ['haveacc','Already have a card? Sign in','Déjà une carte ? Connexion','لديك بطاقة؟ دخول'],['newacc','New here? Create your loyalty card','Nouveau ? Créez votre carte de fidélité','جديد؟ أنشئ بطاقة الولاء'],
 ['confirm','Account created. Confirm your email, then sign in.','Compte créé. Confirmez votre e-mail puis connectez-vous.','تم إنشاء الحساب. أكّد بريدك ثم سجّل الدخول.'],['badlogin','Incorrect email or password','E-mail ou mot de passe incorrect','البريد أو كلمة السر غير صحيحة'],
 ['signhint','Sign in to earn loyalty points on this order.','Connectez-vous pour gagner des points de fidélité.','سجّل الدخول لتحصل على نقاط الولاء.'],
+['revt','What people say','Ce qu’on en dit','ماذا يقولون عنا'],['revprod','About','À propos de','بخصوص'],['revgen','The boutique (general)','La boutique (général)','المتجر (عام)'],
 ['dt','DT','DT','د.ت']].forEach(([k,e,f,a])=>{D.en[k]=e;D.fr[k]=f;D.ar[k]=a});
 let lang='fr';try{lang=localStorage.getItem('gb_lang')||'fr'}catch(e){}if(!D[lang])lang='fr';
 const t=k=>D[lang][k]||D.en[k],tl=(o,f)=>(o&&(o[f+'_'+lang]||o[f]))||'',cv=k=>C[k+'_'+lang]||C[k]||'';
@@ -90,7 +91,7 @@ const stars=n=>'★'.repeat(Math.round(n))+'☆'.repeat(5-Math.round(n)),dt=n=>N
 avg=id=>{const r=R.filter(x=>x.product_id==id);return r.length?r.reduce((a,b)=>a+b.rating,0)/r.length:0},
 pic=p=>p?.image_url?`<img src="${esc(p.image_url)}" alt="${esc(tl(p,'title'))}" loading="lazy">`:esc(p?.emoji||'🎁');
 function toast(m){const e=$('#toast');e.textContent=m;e.style.display='block';clearTimeout(e.h);e.h=setTimeout(()=>e.style.display='none',3800)}
-function go(v,sec){view=v;if(v=='admin')aload();render();if(sec){const e=document.getElementById(sec);e&&e.scrollIntoView({behavior:'smooth'})}else scrollTo(0,0)}
+function go(v,sec){view=v;if(v!='admin'&&location.hash=='#admin')history.replaceState(null,'',location.pathname+location.search);if(v=='admin')aload();render();if(sec){const e=document.getElementById(sec);e&&e.scrollIntoView({behavior:'smooth'})}else scrollTo(0,0)}
 function ov(h,c){$('#pn').innerHTML=h;$('#ov').className='ov on'+(c?' c':'')}function closeOv(){$('#ov').className='ov'}
 async function load(){const [p,r,c]=await Promise.all([db.from('gb_products').select('*').eq('active',true).order('created_at'),db.from('gb_reviews').select('*').eq('approved',true).order('created_at',{ascending:false}),db.from('gb_site_content').select('*')]);
 P=p.data||[];R=r.data||[];C=Object.fromEntries((c.data||[]).map(x=>[x.key,x.value]));if(p.error)toast('Supabase config error');render()}
@@ -100,12 +101,12 @@ function shop(){const cats=['all',...new Set(P.map(p=>p.category))],list=P.filte
 return `<div class="hero"><h1>${esc(cv('hero_title'))}</h1><p class="s">${esc(cv('hero_sub'))}</p><button class="btn" onclick="go('shop','shop')">${t('cta')}</button></div>
 <section id="story"><div class="story"><div class="ph">🎁</div><div><h2>${t('story')}</h2><p>${esc(cv('story'))}</p></div></div></section>
 <section id="shop"><h2>${t('coll')}</h2><div class="bar s"><select onchange="cat=this.value;render()">${cats.map(c=>`<option value="${esc(c)}" ${c==cat?'selected':''}>${c=='all'?t('all'):esc(c)}</option>`).join('')}</select><label style="margin:0">${t('upto')} <b>${mx} ${t('dt')}</b> <input type="range" min="10" max="200" step="5" value="${mx}" oninput="mx=+this.value;render()"></label></div><div class="grid">${list.map(card).join('')||`<p class="mut">${t('nomatch')}</p>`}</div></section>
-<section id="reviews"><h2>${t('revh')}</h2><div class="rv">${R.slice(0,9).map(r=>`<div><div class="st">${stars(r.rating)}</div><p>“${esc(r.comment)}”</p><div class="mut s">${esc(r.name)} · ${esc(tl(pf(r.product_id),'title'))}</div></div>`).join('')||`<p class="mut">${t('norev')}</p>`}</div></section>`}
+<section id="reviews" style="text-align:center"><div class="eb s"><i></i>${t('revh')}</div><h2 style="font-size:clamp(30px,5vw,44px)">${t('revt')}</h2><div class="rv" style="text-align:start">${R.slice(0,9).map(r=>`<div><div class="st">${stars(r.rating)}</div><p style="font-style:italic">“${esc(r.comment)}”</p><div class="au s"><span class="av">${esc([...r.name][0]||'?').toUpperCase()}</span>${esc(r.name)}</div></div>`).join('')||`<p class="mut">${t('norev')}</p>`}</div><p style="margin-top:36px"><button class="btn o" onclick="revForm()">${t('leave')}</button></p></section>`}
 function detail(id){const p=pf(id);
-ov(`<div class="ph" style="font-size:90px;background:var(--soft);aspect-ratio:1">${pic(p)}</div><h2 style="margin:14px 0 4px">${esc(tl(p,'title'))}</h2><p>${esc(tl(p,'description'))}</p><p><b>${dt(p.price)}</b></p><button class="btn" onclick="add('${id}')">${t('add')}</button>
-<h3 style="font-weight:400;margin-top:26px">${t('leave')}</h3><label>${t('name')}</label><input id="rn" maxlength="40"><label>${t('rating')}</label><select id="rs">${[5,4,3,2,1].map(n=>`<option>${n}</option>`).join('')}</select><label>${t('comment')}</label><textarea id="rt" maxlength="300"></textarea><p><button class="btn o sm" onclick="addRev('${id}')">${t('send')}</button></p>`,1)}
-async function addRev(id){const name=$('#rn').value.trim(),comment=$('#rt').value.trim();if(!name||!comment)return toast(t('fill'));
-const{error}=await db.from('gb_reviews').insert({product_id:id,name,rating:+$('#rs').value,comment});if(error)return toast(error.message);closeOv();toast(t('thanks'))}
+ov(`<div class="ph" style="font-size:90px;background:var(--soft);aspect-ratio:1">${pic(p)}</div><h2 style="margin:14px 0 4px">${esc(tl(p,'title'))}</h2><p>${esc(tl(p,'description'))}</p><p><b>${dt(p.price)}</b></p><button class="btn" onclick="add('${id}')">${t('add')}</button>`,1)}
+function revForm(){const c=CU||{};ov(`<h2>${t('leave')}</h2><label>${t('name')}</label><input id="rn" maxlength="40" value="${esc([c.first_name,c.last_name].filter(Boolean).join(' '))}"><label>${t('rating')}</label><select id="rs">${[5,4,3,2,1].map(n=>`<option value="${n}">${'★'.repeat(n)}</option>`).join('')}</select><label>${t('revprod')}</label><select id="rp"><option value="">${t('revgen')}</option>${P.map(p=>`<option value="${p.id}">${esc(tl(p,'title'))}</option>`).join('')}</select><label>${t('comment')}</label><textarea id="rt" maxlength="300"></textarea><p><button class="btn" onclick="addRev()">${t('send')}</button></p>`,1)}
+async function addRev(){const name=$('#rn').value.trim(),comment=$('#rt').value.trim();if(!name||!comment)return toast(t('fill'));
+const{error}=await db.from('gb_reviews').insert({product_id:$('#rp').value||null,name,rating:+$('#rs').value,comment});if(error)return toast(error.message);closeOv();toast(t('thanks'))}
 function add(id){cart[id]=(cart[id]||0)+1;render();openCart()}
 function chg(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];render();openCart()}
 const sub=()=>Object.entries(cart).reduce((a,[i,n])=>a+pf(i).price*n,0);
@@ -142,7 +143,7 @@ function admin(){if(!isAdmin)return `<section class="s" style="max-width:420px">
 const T=['orders','products','reviews','content'];let b='';
 if(tab=='orders')b=`<div class="tw"><table><tr><th>Customer</th><th>Phone</th><th>Mode</th><th>Total</th><th>Status</th></tr>${AD.o.map(o=>`<tr><td>${esc(o.first_name)} ${esc(o.last_name)}<br><span class="mut">${new Date(o.created_at).toLocaleString()}${o.address?'<br>'+esc(o.address):''}</span></td><td dir="ltr">${esc(o.phone)}</td><td>${o.mode}<br><span class="mut">COD${o.discount?' · loyalty −10%':''}</span></td><td>${Number(o.total).toFixed(2)} DT</td><td><select onchange="setSt('${o.id}',this.value)">${['pending','shipped','delivered','canceled'].map(s=>`<option ${s==o.status?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join('')||'<tr><td colspan=5 class="mut">No orders yet.</td></tr>'}</table></div>`;
 if(tab=='products')b=`<p><button class="btn" onclick="edP()">+ Add product</button></p><div class="tw"><table><tr><th></th><th>Product</th><th>Price</th><th>Category</th><th></th></tr>${AD.p.map(p=>`<tr><td style="width:56px"><div class="ph" style="width:48px;height:48px;font-size:26px;background:var(--soft)">${pic(p)}</div></td><td>${esc(p.title)}${p.active?'':' <span class="mut">(hidden)</span>'}</td><td>${Number(p.price).toFixed(2)} DT</td><td>${esc(p.category)}</td><td><button class="btn o sm" onclick="edP('${p.id}')">Edit</button> <button class="btn o sm" onclick="delP('${p.id}')">Delete</button></td></tr>`).join('')}</table></div>`;
-if(tab=='reviews')b=AD.r.map(r=>`<div class="row"><span><span class="st">${stars(r.rating)}</span> ${esc(r.name)} on ${esc(pf(r.product_id)?.title||'?')}<br>${esc(r.comment)}</span><span>${r.approved?'<span class="mut">approved</span>':`<button class="btn sm" onclick="rv('${r.id}',1)">Approve</button>`} <button class="btn o sm" onclick="rv('${r.id}',0)">Delete</button></span></div>`).join('')||'<p class="mut">No reviews.</p>';
+if(tab=='reviews')b=AD.r.map(r=>`<div class="row"><span><span class="st">${stars(r.rating)}</span> ${esc(r.name)} on ${esc(pf(r.product_id)?.title||'Store')}<br>${esc(r.comment)}</span><span>${r.approved?'<span class="mut">approved</span>':`<button class="btn sm" onclick="rv('${r.id}',1)">Approve</button>`} <button class="btn o sm" onclick="rv('${r.id}',0)">Delete</button></span></div>`).join('')||'<p class="mut">No reviews.</p>';
 if(tab=='content')b='<p class="mut">English is the default; FR / AR fall back to English when left empty.</p>'+[['promo','Promo banner'],['hero_title','Hero title'],['hero_sub','Hero subtitle'],['story','Our Story']].map(([k,l])=>`<label>${l}</label>`+['','_fr','_ar'].map(s=>k=='story'?`<textarea class="w" rows="4" data-k="${k+s}" placeholder="${s||'EN'}" ${s=='_ar'?'dir="rtl"':''}>${esc(C[k+s])}</textarea>`:`<input class="w" data-k="${k+s}" placeholder="${s||'EN'}" value="${esc(C[k+s])}" ${s=='_ar'?'dir="rtl"':''}>`).join('')).join('')+`<p><button class="btn" onclick="saveC()">Save changes</button></p>`;
 return `<section class="s"><h2>Admin dashboard <button class="btn o sm" onclick="logout()">Sign out</button></h2><div class="tabs">${T.map(x=>`<button class="btn ${x==tab?'on':''}" onclick="tab='${x}';render()">${x}</button>`).join('')}</div>${b}</section>`}
 const ok=r=>{if(r.error){toast(r.error.message);return false}return true};
