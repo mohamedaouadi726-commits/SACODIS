@@ -57,7 +57,7 @@ footer{text-align:center;color:var(--mut);padding:30px;border-top:1px solid var(
 <nav><a data-i="shop" onclick="go('shop','shop')"></a><a data-i="story" onclick="go('shop','story')"></a><a data-i="reviews" onclick="go('shop','reviews')"></a></nav>
 <input id="q" data-p="search" oninput="q=this.value;go('shop','shop')">
 <button class="lk" data-i="account" onclick="acct()"></button><button class="lk" onclick="favs()"><span data-i="favs"></span> (<span id="fc">0</span>)</button><button class="lk" onclick="openCart()"><span data-i="cart"></span> (<span id="cn">0</span>)</button>
-<button class="lk" id="th" onclick="toggleTheme()" data-i="theme">◐</button>
+<button class="lk" id="th" onclick="toggleTheme()" data-i="theme"></button>
 <select id="lg" onchange="setLang(this.value)" aria-label="Language"><option value="fr">FR</option><option value="en">EN</option><option value="ar">عربي</option></select><button class="lk" id="back" onclick="go('shop')">Retour à l’accueil</button></header>
 <main id="app"></main>
 <footer class="s"><div id="ft" style="margin-bottom:8px"></div><span data-i="foot"></span></footer>
