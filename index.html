@@ -2,7 +2,7 @@
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https://*.supabase.co; base-uri 'self'; form-action 'self'">
-<title>Gift Boutique</title>
+<title>SACODIS</title>
 <style>
 :root{--bg:#fafaf8;--fg:#1a1a1a;--mut:#6b6b66;--line:#e6e4df;--card:#fff;--soft:#f1efea;--acc:#a8814f;--on:#fff}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#121211;--fg:#f2f0ea;--mut:#a09d94;--line:#2c2b28;--card:#1b1a18;--soft:#22211e;--acc:#c9a272;--on:#121211}}
@@ -54,7 +54,7 @@ footer{text-align:center;color:var(--mut);padding:30px;border-top:1px solid var(
 </style></head>
 <body>
 <div class="promo s" id="promo"></div>
-<header class="s"><span class="logo" onclick="go('shop')">Gift Boutique</span>
+<header class="s"><span class="logo" onclick="go('shop')">SACODIS</span>
 <nav><a data-i="shop" onclick="go('shop','shop')"></a><a data-i="story" onclick="go('shop','story')"></a><a data-i="reviews" onclick="go('shop','reviews')"></a></nav>
 <input id="q" data-p="search" oninput="q=this.value;go('shop','shop')">
 <button class="lk" data-i="account" onclick="acct()"></button><button class="lk" onclick="favs()"><span data-i="favs"></span> (<span id="fc">0</span>)</button><button class="lk" onclick="openCart()"><span data-i="cart"></span> (<span id="cn">0</span>)</button>
@@ -67,7 +67,7 @@ footer{text-align:center;color:var(--mut);padding:30px;border-top:1px solid var(
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 /* ====== CONFIG: paste your Supabase project values (Settings > API). The anon key is public by design; RLS protects the data. ====== */
-const SB_URL='https://YOUR-PROJECT.supabase.co',SB_KEY='YOUR-ANON-KEY';
+const SB_URL='https://nqauqewbdiksoolsjwhc.supabase.co',SB_KEY='sb_publishable_KM0WHrrGSoIe0GQGARpQkA_M2iPluua';
 const db=supabase.createClient(SB_URL,SB_KEY);
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /* ====== i18n: [key, EN, FR, AR]. Product/site texts come from the database (see admin > Translations / content). ====== */
