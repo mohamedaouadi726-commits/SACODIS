@@ -5,7 +5,6 @@
 <title>SACODIS</title>
 <style>
 :root{--bg:#fafaf8;--fg:#1a1a1a;--mut:#6b6b66;--line:#e6e4df;--card:#fff;--soft:#f1efea;--acc:#a8814f;--on:#fff}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#121211;--fg:#f2f0ea;--mut:#a09d94;--line:#2c2b28;--card:#1b1a18;--soft:#22211e;--acc:#c9a272;--on:#121211}}
 :root[data-theme=dark]{color-scheme:dark;--bg:#121211;--fg:#f2f0ea;--mut:#a09d94;--line:#2c2b28;--card:#1b1a18;--soft:#22211e;--acc:#c9a272;--on:#121211}
 *{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--fg);font:15px/1.6 Georgia,serif}
 html[lang=ar] body,html[lang=ar] button,html[lang=ar] input{font-family:'Segoe UI',Tahoma,system-ui,sans-serif}
@@ -51,7 +50,8 @@ footer{text-align:center;color:var(--mut);padding:30px;border-top:1px solid var(
 .row2>.card{flex:0 0 calc(16.666% - 13.4px);scroll-snap-align:start;min-width:0}
 .row2{scroll-behavior:smooth}
 .card .ph{font-size:44px}.card .i{padding:8px 10px;font-size:13px}.card .hrt{width:26px;height:26px;font-size:14px;top:6px}
-#shop{max-width:1360px}.sw{position:relative}
+#shop{max-width:1360px}
+.ov.c .pn:has(.dw){width:min(400px,94%);padding:20px}.dw .dph{width:100%;aspect-ratio:4/3;max-height:40vh;background:var(--soft);font-size:56px}.dw h2{font-size:20px;margin:12px 0 4px}.dw p{margin:6px 0;font-size:14px}.dw .btn{padding:10px 22px}.sw{position:relative}
 .nv{position:absolute;top:calc(50% - 30px);transform:translateY(-50%);width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer;font-size:22px;line-height:1;z-index:3;display:grid;place-items:center;padding:0}
 .nv:hover{background:var(--soft)}.nv.l{left:-54px}.nv.r{right:-54px}
 @media(max-width:1100px){.nv{width:34px;height:34px;font-size:18px;opacity:.92;box-shadow:0 2px 8px #0004}.nv.l{left:4px}.nv.r{right:4px}}
@@ -120,7 +120,7 @@ const t=k=>D[lang][k]||D.en[k],tl=(o,f)=>(o&&(o[f+'_'+lang]||o[f]))||'',cv=k=>C[
 function applyStatic(){const h=document.documentElement;h.lang=lang;h.dir=lang=='ar'?'rtl':'ltr';$('#lg').value=lang;
 document.querySelectorAll('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));document.querySelectorAll('[data-p]').forEach(e=>e.placeholder=t(e.dataset.p))}
 function setLang(l){lang=l;try{localStorage.setItem('gb_lang',l)}catch(e){}applyStatic();render()}
-function toggleTheme(){const r=document.documentElement,dark=r.dataset.theme?r.dataset.theme=='dark':matchMedia('(prefers-color-scheme:dark)').matches,n=dark?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('gb_theme',n)}catch(e){}}
+function toggleTheme(){const r=document.documentElement,dark=r.dataset.theme=='dark',n=dark?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('gb_theme',n)}catch(e){}}
 try{const th=localStorage.getItem('gb_theme');if(th)document.documentElement.dataset.theme=th}catch(e){}
 let FV=[];try{FV=JSON.parse(localStorage.getItem('gb_fav')||'[]').filter(x=>typeof x=='string')}catch(e){}
 let CT=[],P=[],R=[],C={},cart={},cat='all',mx=200,q='',view='shop',tab='orders',isAdmin=false,AD={};
@@ -150,7 +150,7 @@ return `<div class="hero"><h1>${esc(cv('hero_title'))}</h1><p class="s">${esc(cv
 <section id="shop"><div class="hd"><h2>${t('coll')}</h2></div>${B.length?`<div class="cw">${arrL('cr')}<div class="cb" id="cr">${B.map(b=>`<button class="cx ${cat==b.id?'on':''}" onclick="cat=cat=='${b.id}'?'all':'${b.id}';go('shop','shop')">${esc(b.n)}</button>`).join('')}</div>${arrR('cr')}</div>`:''}<div class="sw">${arrL('rp')}<div class="row2" id="rp">${L.map(card).join('')||`<p class="mut">${t('nomatch')}</p>`}</div>${arrR('rp')}</div></section>
 <section id="reviews" style="text-align:center"><div class="eb s"><i></i>${t('revh')}</div><h2 style="font-size:clamp(30px,5vw,44px)">${t('revt')}</h2><div class="rv" style="text-align:start">${R.slice(0,9).map(r=>`<div><div class="st">${stars(r.rating)}</div><p style="font-style:italic">“${esc(r.comment)}”</p><div class="au s"><span class="av">${esc([...r.name][0]||'?').toUpperCase()}</span>${esc(r.name)}</div></div>`).join('')||`<p class="mut">${t('norev')}</p>`}</div><p style="margin-top:36px"><button class="btn o" onclick="revForm()">${t('leave')}</button></p></section>`}
 function detail(id){const p=pf(id);
-ov(`<div class="ph" style="font-size:90px;background:var(--soft);aspect-ratio:1">${pic(p)}</div><h2 style="margin:14px 0 4px">${esc(tl(p,'title'))}</h2><p>${esc(tl(p,'description'))}</p><p><b>${dt(p.price)}</b></p><button class="btn" onclick="add('${id}')">${t('add')}</button>`,1)}
+ov(`<div class="dw"><div class="ph dph">${pic(p)}</div><h2>${esc(tl(p,'title'))}</h2><p>${esc(tl(p,'description'))}</p><p><b>${dt(p.price)}</b></p><button class="btn" onclick="add('${id}')">${t('add')}</button></div>`,1)}
 function revForm(){const c=CU||{};ov(`<h2>${t('leave')}</h2><label>${t('name')}</label><input id="rn" maxlength="40" value="${esc([c.first_name,c.last_name].filter(Boolean).join(' '))}"><label>${t('rating')}</label><select id="rs">${[5,4,3,2,1].map(n=>`<option value="${n}">${'★'.repeat(n)}</option>`).join('')}</select><label>${t('revprod')}</label><select id="rp"><option value="">${t('revgen')}</option>${P.map(p=>`<option value="${p.id}">${esc(tl(p,'title'))}</option>`).join('')}</select><label>${t('comment')}</label><textarea id="rt" maxlength="300"></textarea><p><button class="btn" onclick="addRev()">${t('send')}</button></p>`,1)}
 async function addRev(){const name=$('#rn').value.trim(),comment=$('#rt').value.trim();if(!name||!comment)return toast(t('fill'));
 const{error}=await db.from('gb_reviews').insert({product_id:$('#rp').value||null,name,rating:+$('#rs').value,comment});if(error)return toast(error.message);closeOv();toast(t('thanks'))}
